@@ -1,0 +1,69 @@
+# grn_swap.yaml — single source of truth for the GRN motif-swap framework.
+# Repo paths are relative to the project root; external data paths (Zebrahub, caches)
+# are filled in from src/af3tfm/config.yaml by grnswap.config.load_config().
+
+# Motif databases
+motif_db:
+  # ZEBRAMOTIF: AF3-derived motifs (MEME v4). 'all_modes' = primary + alternate binding modes.
+  zebramotif_meme:         data/database/zebramotif_all_modes.meme
+  zebramotif_meme_primary: data/database/zebramotif_primary_modes.meme
+  # Converted gimmemotifs pair (written by convert_meme_to_gimme.py):
+  zebramotif_prefix:       data/tools/celloracle/outputs/motifs/zebramotif_all_modes
+  evidence_label:          AF3
+
+  # CISBP: full CisBP v3.10 danRer11 (all inferred motifs per TF), built by build_cisbp_db.py.
+  # Size-matched to CellOracle's bundled v2 dump; version-consistent with the ZebraMotif benchmark.
+  cisbp_prefix:            data/tools/celloracle/outputs/motifs/cisbp_v3.10_danrer11
+  cisbp_build:             "3_10"
+  # cisbp_cache:           <- paths.cisbp_cache in src/af3tfm/config.yaml
+
+  # HYBRID: ZebraMotif + CisBP concatenated (built by build_hybrid_db.py). Every TF keeps both
+  # its ZebraMotif and CisBP motifs -> strict superset of the cisbp & zebramotif candidate edges.
+  hybrid_prefix:           data/tools/celloracle/outputs/motifs/hybrid_zebramotif_cisbp
+
+# Reference genome & motif-scan params (identical for all arms)
+scan:
+  ref_genome:            danRer11
+  fpr:                   0.02
+  motif_score_threshold: 10
+  n_cpus:                -1
+
+# GRN inference params (identical for all arms)
+grn:
+  # Toggle: global_annotation (14 groups) or annotation_ML_coarse (32 groups).
+  # This also selects outputs.root; --annotation overrides it for one run.
+  annotation:        global_annotation
+  dim_reduce:        X_umap.rna             # RNA-only embedding in adata.obsm
+  timepoint_col:     dev_stage             # multiome stage column in adata.obs
+  subset_by_timepoint: true                # true -> celltype x timepoint GRNs; false -> whole-atlas celltype GRNs
+  alpha:             10
+  filter_p:          0.001
+  filter_weight:     coef_abs
+  filter_threshold_number: 2000
+  hvg_n_top_genes:   3000
+
+# Inputs
+inputs:
+  # rna_h5ad:           <- paths.zebrahub_multiome_rna_h5ad in src/af3tfm/config(.local).yaml
+  rna_layer:            counts              # raw RNA counts; X contains transformed expression
+  # Per-timepoint processed ATAC peak files live under this root:
+  # zebrahub_processed: <- paths.zebrahub_processed in src/af3tfm/config.yaml
+  cicero_subdir:      02_cicero_processed   # {root}/{cicero_subdir}/{cicero_id}_cicero/
+
+# Timepoints. `id` locates the peak file and motif prior; `rna_timepoint` is the obs
+# label used to subset the multiome RNA's dev_stage column.
+timepoints:
+  - {stage: "0somite",  id: TDR126,       rna_timepoint: "0somites"}
+  - {stage: "5somite",  id: TDR127,       rna_timepoint: "5somites"}
+  - {stage: "10somite", id: TDR128,       rna_timepoint: "10somites"}
+  - {stage: "15somite", id: TDR118reseq,  rna_timepoint: "15somites"}
+  - {stage: "20somite", id: TDR125reseq,  rna_timepoint: "20somites"}
+  - {stage: "30somite", id: TDR124reseq,  rna_timepoint: "30somites"}
+
+# Outputs (gitignored). Annotation-dependent paths are derived by load_config().
+outputs:
+  shared_root: data/tools/celloracle/outputs
+  # Derived root: shared_root/<annotation> for either annotation selection.
+  # Motifs and base_grn remain shared, independent of the annotation toggle.
+  # Oracle/links/csv: {derived root}/{oracle,links,grn_csv}/{arm}/...
+  # arm/db tag is one of: cisbp, zebramotif, hybrid (all arms run through identical code)

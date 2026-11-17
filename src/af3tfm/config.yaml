@@ -1,0 +1,44 @@
+# Defaults for af3tfm. Put your own values (paths, mail_user, ...) in config.local.yaml
+# next to this file; it is gitignored and overrides any key set here.
+
+# slurm directives
+job_name: alphafold3                      # Job name
+time: "3:00:00"                           # Time limit hrs:min:sec
+mem: 16G                                  # Memory limit         
+partition: gpu                            # Partition (cpu or gpu)
+constraint: None                          # Constraint (type of gpu ex. h100, a100_80, h200, etc.)
+exclude: None                             # Nodes to exclude (comma-separated, ex. gpu-i-1)
+gpus: 1                                   # Number of gpus
+ntasks: 1                                 # Number of tasks
+cpus_per_task: 4                          # Number of cpus per task
+mail_type: FAIL                           # Mail type (BEGIN, END, FAIL, ALL)
+mail_user: ""                             # Mail user (empty = no --mail-user line)
+
+# alphafold3 config
+input_dir: /path/to/input_dirs            # Path to input json files
+output_dir: /path/to/output_dir           # Path to output directory
+json_file: .json                          # Input json file
+run_data_pipeline: True                   # Run data pipeline (True/False)
+run_inference: True                       # Run inference (True/False)
+
+# external paths
+# Loaded by af3tfm.config (Python), data/tools/chromvar/utils.R (R),
+# data/tools/celloracle/src/grnswap/config.py, and the slurm/sbatch scripts (via sed)
+paths:
+  # Zebrahub multiome
+  zebrahub_objects_v2: /path/to/zebrahub_multiome/data/annotated_data/objects_v2
+  zebrahub_multiome_rna_h5ad: /path/to/zebrahub_multiome/data/processed_data/01_Signac_processed/integrated_RNA_ATAC_counts_RNA_master_filtered.h5ad
+  zebrahub_processed: /path/to/zebrahub_multiome/data/processed_data
+  zebrahub_peaks_fasta: /path/to/zebrahub_multiome/data/processed_data/OLD_peak_umap_motif_analysis/peaks_integrated.fasta
+  zebrahub_signac_rds: /path/to/zebrahub_multiome/data/processed_data/01_Signac_processed/integrated_RNA_ATAC.rds
+  zebrahub_seacells_dir: /path/to/zebrahub_multiome/data/processed_data/05_SEACells_processed/objects_75cells_per_metacell
+
+  # Reference genome
+  genome_fa: /path/to/danRer11.fa
+
+  # Conda environments
+  celloracle_env: /path/to/conda/envs/celloracle
+
+  # Scratch / caches
+  cisbp_cache: /path/to/cisbp_v3.10_cache
+  job_cache: /path/to/cache_jobs

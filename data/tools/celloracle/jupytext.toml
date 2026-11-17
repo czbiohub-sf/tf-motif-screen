@@ -1,0 +1,2 @@
+# Pair .ipynb notebooks with py:percent text notebooks (commit .py, ignore .ipynb).
+formats = "ipynb,py:percent"

@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "title": "Proteome-scale inference of transcription factor binding motifs from predicted protein-DNA structures",
+  "version": "0.1",
+  "snapshot_date": null,
+  "publication_date": null,
+  "doi": "10.5281/zenodo.23380219",
+  "creators": [
+    {
+      "family_name": "Iovino",
+      "given_name": "Benjamin",
+      "affiliation": "Biohub"
+    },
+    {
+      "family_name": "Kim",
+      "given_name": "Yang Joon",
+      "affiliation": "Biohub"
+    },
+    {
+      "family_name": "Royer",
+      "given_name": "Loïc A",
+      "affiliation": "Biohub"
+    }
+  ],
+  "repositories": {
+    "ZebraMotif": "https://github.com/czbiohub-sf/zebramotif-explorer",
+    "af3-tf-motif": "https://github.com/czbiohub-sf/af3-tf-motif"
+  },
+  "contact_url": "https://github.com/czbiohub-sf/zebramotif-explorer/issues",
+  "reported_versions": {
+    "basis": "af3-tf-motif/README.md",
+    "AlphaFold 3": "3.0.1",
+    "AlphaFold 3 model parameters": "November 2024",
+    "NA-MPNN": "commit 835974f3; checkpoint s_70114.pt",
+    "AnimalTFDB": "4.0",
+    "JASPAR": "2024 CORE vertebrates, redundant",
+    "InterProScan": "5.73-104.0",
+    "Pfam": "37.2"
+  },
+  "observed_annotation_versions": {
+    "basis": "af3-tf-motif/data/tools/ipscan/tfdb4_rep/tfdb4_rep_results.json",
+    "InterProScan": "5.73-104.0",
+    "Pfam": "37.2",
+    "PROSITE Profiles": "2023_05"
+  },
+  "documented_snapshots": {
+    "basis": "Release 0.1 metadata; null dates were not recorded.",
+    "motifs": null,
+    "confidence_metrics": null,
+    "domain_annotation_refresh": null,
+    "catalog_and_sequence_metadata_refresh": null,
+    "ZFIN": "Frozen ZFIN gene-ID mapping; original download date was not recorded."
+  },
+  "methods": {
+    "num_specs": 47,
+    "cor_threshold": 0.73,
+    "maximum_alternates": 3,
+    "specificity_selection": "Top predictions by the product of ipTM and DNA-binding-domain pLDDT percentile ranks.",
+    "primary_selection": "Largest UPGMA cluster of predicted specificities, with equal-size ties broken by the product of member confidence ranks.",
+    "primary_structure_selection": "Most confident member of the primary mode by the ipTM and domain-pLDDT percentile-rank product.",
+    "matrix_column_order": [
+      "A",
+      "C",
+      "G",
+      "T"
+    ]
+  },
+  "reference_sequence_provenance": {
+    "tf_sequence_genome_assembly": null,
+    "ensembl_annotation_release": null,
+    "note": "The genome assembly and Ensembl annotation release of the TF-sequence inputs were not recorded."
+  },
+  "citation": {
+    "dataset_metadata_url": "https://zenodo.org/records/23380219",
+    "project_paper": null,
+    "alphafold3": {
+      "text": "Abramson, J. et al. Accurate structure prediction of biomolecular interactions with AlphaFold 3. Nature 630, 493–500 (2024).",
+      "doi": "10.1038/s41586-024-07487-w",
+      "url": "https://doi.org/10.1038/s41586-024-07487-w"
+    }
+  },
+  "terms": {
+    "alphafold3_output_terms_url": "https://github.com/google-deepmind/alphafold3/blob/main/OUTPUT_TERMS_OF_USE.md",
+    "dataset_license_url": "https://zenodo.org/records/23380219",
+    "scope": "AlphaFold 3 structures and derivatives, including predicted motifs, confidence summaries, DNA-contact residues, and AF3-derived domain-placement flags. Reference annotations retain their providers' terms; repository MIT licenses apply to software."
+  },
+  "metadata_sources": [
+    "data/database/release/metadata.json",
+    "data/database/release/README.template.md",
+    "data/database/export_data.py",
+    "data/database/export_tools/database_export.py",
+    "data/database/export_tools/confidence_export.py",
+    "data/database/export_tools/motif_downloads.py",
+    "data/database/export_tools/release_export.py",
+    "data/database/export_tools/metric_bands.py"
+  ],
+  "release_label": "Initial bioRxiv version",
+  "description": "Predicted DNA-binding probability matrices and selected protein-DNA structures for Danio rerio transcription factors. The af3-tf-motif pipeline uses AlphaFold 3 structures, NA-MPNN specificity predictions, and consensus clustering to produce primary and alternate binding modes. The dataset includes representative mappings, reference motif comparisons, confidence summaries, domain annotations, and DNA-contact residues.",
+  "keywords": [
+    "Danio rerio",
+    "zebrafish",
+    "transcription factor",
+    "DNA-binding specificity",
+    "probability matrix",
+    "AlphaFold 3",
+    "NA-MPNN"
+  ]
+}

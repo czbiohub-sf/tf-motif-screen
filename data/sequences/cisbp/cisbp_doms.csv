@@ -1,0 +1,66 @@
+DBID,TF_Name,accession,description,start,end,DNA-Binding
+ENSDARG00000021378,phf21ab,IPR019787,"Zinc finger, PHD-finger",496,537,True
+ENSDARG00000040926,nr2f2,IPR000536,"Nuclear hormone receptor, ligand-binding domain",207,394,False
+ENSDARG00000040926,nr2f2,IPR001628,"Zinc finger, nuclear hormone receptor-type",86,154,True
+ENSDARG00000022712,stat3,IPR013800,"STAT transcription factor, all-alpha domain",144,314,False
+ENSDARG00000022712,stat3,IPR000980,SH2 domain,585,655,False
+ENSDARG00000022712,stat3,IPR013801,"STAT transcription factor, DNA-binding",327,465,True
+ENSDARG00000022712,stat3,IPR048988,"Signal transducer and activator of transcription, linker domain",489,566,False
+ENSDARG00000022712,stat3,IPR013799,"STAT transcription factor, protein interaction",2,119,False
+ENSDARG00000095896,pou3f3b,IPR000327,POU-specific domain,242,312,True
+ENSDARG00000095896,pou3f3b,IPR001356,Homeodomain,331,387,False
+ENSDARG00000018025,tbx2a,IPR046360,"T-box transcription factor, DNA-binding domain",85,265,True
+ENSDARG00000018025,tbx2a,IPR048387,"T-box transcription factor 2/3, repressor domain",499,603,False
+ENSDARG00000018025,tbx2a,IPR022582,"T-box transcription factor 2/3, transcription activation domain",283,358,False
+ENSDARG00000059653,kdm2aa,IPR019787,"Zinc finger, PHD-finger",550,607,False
+ENSDARG00000059653,kdm2aa,IPR002857,"Zinc finger, CXXC-type",501,545,True
+ENSDARG00000059653,kdm2aa,IPR001810,F-box domain,980,1019,False
+ENSDARG00000059653,kdm2aa,IPR041070,"Jumonji, helical domain",304,346,False
+ENSDARG00000020964,prkrirb,IPR025398,Domain of unknown function DUF4371,151,329,False
+ENSDARG00000020964,prkrirb,IPR006612,THAP-type zinc finger,5,86,True
+ENSDARG00000099555,foxo1a,IPR032068,"FOXO protein, KIX-binding domain",411,480,False
+ENSDARG00000099555,foxo1a,IPR032067,"FOXO protein, transactivation domain",592,631,False
+ENSDARG00000099555,foxo1a,IPR001766,Fork head domain,136,217,True
+ENSDARG00000016526,gata3,IPR000679,"Zinc finger, GATA-type",256,289,False
+ENSDARG00000016526,gata3,IPR000679,"Zinc finger, GATA-type",310,342,True
+ENSDARG00000077304,erg,IPR003118,Pointed domain,77,146,False
+ENSDARG00000077304,erg,IPR000418,Ets domain,258,336,True
+ENSDARG00000070913,sox2,IPR022097,Transcription factor SOX,107,197,False
+ENSDARG00000070913,sox2,IPR009071,High mobility group box domain,38,106,True
+ENSDARG00000030110,myod1,IPR011598,"Myc-type, basic helix-loop-helix (bHLH) domain",85,136,True
+ENSDARG00000030110,myod1,IPR002546,"Myogenic muscle-specific protein, N-terminal",14,84,False
+ENSDARG00000030110,myod1,IPR022032,Myogenic determination factor 5,151,220,False
+ENSDARG00000067850,jund,IPR005643,Jun-like transcription factor,19,193,False
+ENSDARG00000067850,jund,IPR004827,Basic-leucine zipper domain,203,266,True
+ENSDARG00000078676,myrf,IPR024061,NDT80 DNA-binding domain,323,469,True
+ENSDARG00000078676,myrf,IPR030392,Intramolecular chaperone auto-processing domain,516,556,False
+ENSDARG00000104199,si:dkey-43p13.5,IPR003654,OAR domain,221,239,False
+ENSDARG00000104199,si:dkey-43p13.5,IPR001356,Homeodomain,85,141,True
+ENSDARG00000031891,tbx1,IPR046360,"T-box transcription factor, DNA-binding domain",117,302,True
+ENSDARG00000063194,lin54,IPR005172,CRC domain,546,580,False
+ENSDARG00000063194,lin54,IPR005172,CRC domain,620,654,True
+ENSDARG00000076763,sp2,IPR013087,Zinc finger C2H2-type,582,604,True
+ENSDARG00000076763,sp2,IPR013087,Zinc finger C2H2-type,552,576,True
+ENSDARG00000076763,sp2,IPR013087,Zinc finger C2H2-type,522,546,True
+ENSDARG00000059256,hoxd13a,IPR001356,Homeodomain,192,248,True
+ENSDARG00000032578,pax2b,IPR001523,Paired domain,16,139,True
+ENSDARG00000032578,pax2b,IPR022130,Paired-box protein 2 C-terminal,281,385,False
+ENSDARG00000031756,mef2aa,IPR022102,Holliday junction regulator protein family C-terminal,139,198,False
+ENSDARG00000031756,mef2aa,IPR002100,"Transcription factor, MADS-box",10,57,True
+ENSDARG00000005574,vsx2,IPR001356,Homeodomain,166,222,True
+ENSDARG00000005574,vsx2,IPR003654,OAR domain,318,335,False
+ENSDARG00000053097,hsf2,IPR010542,"Vertebrate heat shock transcription factor, C-terminal domain",381,427,False
+ENSDARG00000053097,hsf2,IPR010542,"Vertebrate heat shock transcription factor, C-terminal domain",227,379,False
+ENSDARG00000053097,hsf2,IPR000232,"Heat shock factor (HSF)-type, DNA-binding",10,110,True
+ENSDARG00000040955,dharma,IPR001356,Homeodomain,117,172,True
+ENSDARG00000028148,pax2a,IPR001523,Paired domain,16,139,True
+ENSDARG00000028148,pax2a,IPR022130,Paired-box protein 2 C-terminal,284,390,False
+ENSDARG00000015495,klf3,IPR013087,Zinc finger C2H2-type,243,267,True
+ENSDARG00000015495,klf3,IPR013087,Zinc finger C2H2-type,273,297,True
+ENSDARG00000015495,klf3,IPR013087,Zinc finger C2H2-type,303,325,True
+ENSDARG00000069988,arid6,IPR001606,ARID DNA-binding domain,23,108,True
+ENSDARG00000036593,kdm2ba,IPR001810,F-box domain,610,651,False
+ENSDARG00000036593,kdm2ba,IPR002857,"Zinc finger, CXXC-type",74,118,True
+ENSDARG00000036593,kdm2ba,IPR019787,"Zinc finger, PHD-finger",123,189,False
+ENSDARG00000042489,prkrira,IPR006612,THAP-type zinc finger,5,86,True
+ENSDARG00000042489,prkrira,IPR025398,Domain of unknown function DUF4371,152,326,False

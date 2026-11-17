@@ -1,0 +1,97 @@
+# Data directories
+data/jobs
+data/tools/rosetta/results
+*__pycache__/
+
+# InterProScan files and outputs
+data/tools/ipscan/cisbp
+data/tools/ipscan/selex
+data/tools/ipscan/tfdb4
+data/tools/ipscan/tfdb4_rep
+data/tools/ipscan/tfdb4_val
+data/tools/ipscan/interproscan
+data/tools/ipscan/ipscan_*
+
+# Blast files and outputs
+data/tools/blast/fasta_files
+data/tools/blast/humandb
+data/tools/blast/results
+data/tools/blast/results_dbd
+data/tools/blast/zfin
+
+# Homer files and outputs
+data/tools/homer/878
+data/tools/homer/jaspar
+data/tools/homer/jaspar_clustered
+data/tools/homer/*.motif
+data/tools/homer/inter_sim.npy
+
+# MMseqs files and outputs
+data/tools/mmseqs/animaltfdb4/
+data/tools/mmseqs/hd_clusters/
+
+# NA-MPNN
+data/tools/NA-MPNN
+
+# Local embedding experiments
+/data/tools/esmc/
+
+# Rosetta
+data/tools/rosetta
+
+# Foldseek files and outputs
+data/tools/foldseek/pdb100
+data/tools/foldseek/query_structures
+data/tools/foldseek/results
+data/tools/tmp_foldseek
+
+# ChromVAR outputs
+data/tools/chromvar/results
+data/tools/chromvar/slurm_logs
+
+# CellOracle outputs
+data/tools/celloracle/logs
+data/tools/celloracle/outputs
+
+# Jupytext reports
+notebooks/reports
+notebooks/streme
+
+# Notebook figure and table outputs
+notebooks/*/figures/
+notebooks/*/tables/
+
+# Files used for testing
+test*
+!/tests/
+!/tests/test_get_domains.py
+!/tests/test_*.py
+!/data/database/tests/
+!/data/database/tests/test_*.py
+
+# GRN motif-swap framework (grn/): ignore large outputs + logs, keep small comparison tables
+grn/logs/
+grn/outputs/*
+!grn/outputs/comparison/
+grn/notebooks/*.ipynb
+grn/scripts/__pycache__/
+grn/src/grnswap/__pycache__/
+
+# Generated motif database and release files (export code/resources stay versioned)
+/data/database/export/
+
+# Personal af3tfm config (paths, mail_user)
+src/af3tfm/config.local.yaml
+
+# CisBP motif data (third-party; regenerate with data/sequences/cisbp/get_cisbp_danio.py + get_motifs.py)
+data/sequences/cisbp/pwms/
+data/sequences/cisbp/motifs/
+data/sequences/cisbp/CisBP_2025/
+data/sequences/cisbp/TF_Information.txt
+
+# Regenerable AnimalTFDB protein FASTAs (the pipeline uses the CSVs)
+/data/sequences/animaltfdb/tfdb4_tfs.fasta
+/data/sequences/animaltfdb/human_tfs.fasta
+
+# macOS
+.DS_Store

@@ -1,0 +1,240 @@
+# Canonical DBD class -> native vocabulary terms in each resource, consumed by
+# notebooks/04_database-and-applications/04_database-coverage.py.
+#
+# One entry per canonical class, and the entry order here is CANON_ORDER, which orders
+# the coverage table. `interpro` lists the InterPro DBD accession(s) that anchor the
+# class (from our own DNA-Binding==True interproscan annotations where available);
+# `animaltfdb`, `jaspar_class`/`jaspar_family` and `cisbp` list the native vocabulary
+# terms that map onto it.
+#
+# JASPAR is keyed on TFClass `class`, except where a class lumps distinct DBDs
+# ("Tryptophan cluster factors", "Fork head/winged helix factors", HMG, Other-C4) --
+# there we key on the finer `family` field instead.
+
+zf-C2H2:
+  interpro: [IPR013087]
+  animaltfdb: [zf-C2H2, ZBTB]
+  jaspar_class: [C2H2 zinc finger factors]
+  cisbp: [C2H2 ZF, 'bZIP,C2H2 ZF', 'C2H2 ZF,Homeodomain']
+zf-THAP:
+  interpro: []
+  animaltfdb: [THAP]
+  jaspar_class: [C2CH THAP-type zinc finger factors]
+  cisbp: [THAP finger]
+zf-BED:
+  interpro: [IPR003656]
+  animaltfdb: [zf-BED]
+  # JASPAR nests BED under its TFClass C2H2 class; pull it out via the finer family label.
+  jaspar_family: [BED zinc finger factors]
+  cisbp: [BED ZF]
+zf-C2HC:
+  interpro: []
+  animaltfdb: [zf-C2HC]
+  jaspar_class: [C2HC]
+  cisbp: [C2HC ZF]
+zf-CXXC:
+  interpro: []
+  animaltfdb: []
+  jaspar_class: []
+  cisbp: [CxxC, TCR/CxC]
+Nuclear receptor:
+  interpro: [IPR001628]
+  animaltfdb: [RXR-like, ESR-like, THR-like, NGFIB-like, SF-like, GCNF-like]
+  jaspar_class: [Nuclear receptors with C4 zinc fingers]
+  cisbp: [Nuclear receptor]
+zf-GATA:
+  interpro: [IPR000679]
+  animaltfdb: [zf-GATA]
+  jaspar_family: [C4-GATA-related]
+  cisbp: [GATA]
+zf-DM:
+  interpro: [IPR001275]
+  animaltfdb: [DM]
+  jaspar_class: [DM-type intertwined zinc finger factors]
+  cisbp: [DM]
+zf-Other:
+  interpro: []
+  animaltfdb: [zf-MIZ, zf-NF-X1, zf-LITAF-like, zf-CCCH, GTF2I]
+  jaspar_class: []
+  cisbp: [GTF2I-like, NFX]
+bHLH:
+  interpro: [IPR011598]
+  animaltfdb: [bHLH]
+  jaspar_class: [Basic helix-loop-helix factors (bHLH)]
+  cisbp: [bHLH]
+bZIP:
+  interpro: [IPR004827, IPR004826]
+  animaltfdb: [TF_bZIP]
+  jaspar_class: [Basic leucine zipper factors (bZIP)]
+  cisbp: [bZIP]
+AP-2 / bHSH:
+  interpro: [IPR013854]
+  animaltfdb: [AP-2]
+  jaspar_class: [Basic helix-span-helix factors (bHSH)]
+  cisbp: [AP-2]
+Homeodomain:
+  interpro: [IPR001356, IPR000327, IPR003350]
+  animaltfdb: [Homeobox, TF_Otx, Pou, CUT]
+  jaspar_class: [Homeo domain factors]
+  cisbp: [Homeodomain, 'Homeodomain,POU', 'CUT,Homeodomain', 'Prospero']
+Forkhead:
+  interpro: [IPR001766]
+  animaltfdb: [Fork_head]
+  jaspar_family: [FOX]
+  cisbp: [Forkhead]
+RFX:
+  interpro: [IPR003150]
+  animaltfdb: [RFX]
+  jaspar_family: [RFX-related factors]
+  cisbp: [RFX]
+E2F/DP:
+  interpro: [IPR003316]
+  animaltfdb: [E2F]
+  jaspar_family: [E2F]
+  cisbp: [E2F]
+HMG/Sox:
+  interpro: [IPR009071]
+  animaltfdb: [HMG, HMGA]
+  jaspar_family: [SOX-related factors, TCF-7-related factors]
+  cisbp: [Sox, AT hook]
+Myb/SANT:
+  interpro: [IPR001005]
+  animaltfdb: [MYB]
+  jaspar_family: [Myb/SANT domain factors, Myb-SANT]
+  cisbp: [Myb/SANT, MADF]
+Ets:
+  interpro: [IPR000418]
+  animaltfdb: [ETS]
+  jaspar_family: [Ets-related]
+  cisbp: [Ets]
+IRF:
+  interpro: [IPR001346]
+  animaltfdb: [IRF]
+  jaspar_family: [Interferon-regulatory factors]
+  cisbp: [IRF]
+T-box:
+  interpro: [IPR046360]
+  animaltfdb: [T-box]
+  jaspar_class: [T-Box factors]
+  cisbp: [T-box]
+STAT:
+  interpro: [IPR013801]
+  animaltfdb: [STAT]
+  jaspar_class: [STAT domain factors]
+  cisbp: [STAT]
+Rel/RHD:
+  interpro: []
+  animaltfdb: [RHD]
+  jaspar_class: [Rel homology region (RHR) factors]
+  cisbp: [RHR, NF-kB, Rel]
+SMAD/NF-1:
+  interpro: [IPR003619]
+  animaltfdb: [MH1, CTF_NFI]
+  jaspar_class: [SMAD/NF-1 DNA-binding domain factors]
+  cisbp: [SMAD]
+p53:
+  interpro: [IPR011615]
+  animaltfdb: [P53]
+  jaspar_class: [p53 domain factors]
+  cisbp: [p53]
+Runt:
+  interpro: [IPR013524]
+  animaltfdb: [Runt]
+  jaspar_class: [Runt domain factors]
+  cisbp: [Runt]
+MADS box:
+  interpro: [IPR002100]
+  animaltfdb: [SRF]
+  jaspar_class: [MADS box factors]
+  cisbp: [MADS box]
+TEA:
+  interpro: [IPR000818]
+  animaltfdb: [TEA]
+  jaspar_class: [TEA domain factors]
+  cisbp: [TEA]
+HSF:
+  interpro: [IPR000232]
+  animaltfdb: [HSF]
+  jaspar_class: [Heat shock factors]
+  cisbp: [HSF]
+SAND:
+  interpro: [IPR000770]
+  animaltfdb: [SAND]
+  jaspar_class: [SAND domain factors]
+  cisbp: [SAND]
+Paired box:
+  interpro: [IPR001523]
+  animaltfdb: [PAX]
+  jaspar_class: [Paired box factors]
+  cisbp: [Paired box, 'Homeodomain,Paired box']
+Grainyhead/CP2:
+  interpro: []
+  animaltfdb: [CP2]
+  jaspar_class: [Grainyhead domain factors]
+  cisbp: [Grainyhead]
+CG-1/CAMTA:
+  interpro: []
+  animaltfdb: [CG-1]
+  jaspar_class: []
+  cisbp: [CG-1]
+GCM:
+  interpro: []
+  animaltfdb: [GCM]
+  jaspar_class: [GCM domain factors]
+  cisbp: [GCM]
+CBF/NF-Y:
+  interpro: [IPR003958]
+  animaltfdb: [CBF, NF-YA, NF-YB, NF-YC]
+  jaspar_class: [Heteromeric CCAAT-binding factors]
+  cisbp: [CBF/NF-Y]
+CSL/RBPJ:
+  interpro: []
+  animaltfdb: [CSL]
+  jaspar_class: []
+  cisbp: [CSL]
+TATA-binding (TBP):
+  interpro: []
+  animaltfdb: []
+  jaspar_class: [TATA-binding proteins]
+  cisbp: [TBP]
+COE/EBF:
+  interpro: [IPR032200]
+  animaltfdb: [COE]
+  jaspar_class: []
+  cisbp: [COE, EBF1]
+ARID:
+  interpro: [IPR001606]
+  animaltfdb: [ARID]
+  jaspar_class: [ARID]
+  cisbp: [ARID/BRIGHT]
+MBD:
+  interpro: []
+  animaltfdb: [MBD]
+  jaspar_class: []
+  cisbp: [MBD]
+CSD (cold-shock):
+  interpro: []
+  animaltfdb: [CSD]
+  jaspar_class: []
+  cisbp: [CSD]
+Ndt80/PhoG:
+  interpro: []
+  animaltfdb: [NDT80_PhoG]
+  jaspar_class: []
+  cisbp: [Ndt80/PhoG]
+CSRNP:
+  interpro: []
+  animaltfdb: [CSRNP_N]
+  jaspar_class: []
+  cisbp: [CSRNP]
+Nrf1:
+  interpro: [IPR019525]
+  animaltfdb: [Nrf1]
+  jaspar_class: []
+  cisbp: []
+# Genuinely un-DBD-defining / orphan AnimalTFDB families fold into Other.
+Other:
+  interpro: []
+  animaltfdb: [Others, Miscellaneous, TSC22, LRRFIP, Tub, DACH, AF-4, PC4, NCU-G1, GCFC, HPD, HTH]
+  jaspar_class: [Uncharacterized, Helix-Turn-Helix, CRC domain]
+  cisbp: [Pipsqueak]
