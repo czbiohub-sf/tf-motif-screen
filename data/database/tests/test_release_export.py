@@ -10,6 +10,7 @@ import zipfile
 from pathlib import Path
 
 import pandas as pd
+import yaml
 
 from export_tools.database_export import DOMAIN_COLUMNS
 from export_tools.release_export import TABLES, export_release, inventory
@@ -166,6 +167,18 @@ class ReleaseExportTests(unittest.TestCase):
         with zipfile.ZipFile(self.output / "zebramotif-data-0.1.zip") as archive:
             self.assertEqual(set(archive.namelist()), set(inventory(raw)))
             self.verify_archive_checksums(archive)
+            citation = yaml.safe_load(archive.read("CITATION.cff"))
+            self.assertEqual(citation["type"], "dataset")
+            (paper,) = citation["references"]
+            self.assertEqual(paper["type"], "article")
+            self.assertEqual(paper["doi"], "10.64898/2026.11.18.767614")
+            metadata = json.loads(archive.read("release_metadata.json"))
+            self.assertEqual(metadata["citation"]["project_paper"]["doi"], paper["doi"])
+            pipeline_notice = "notices/tf-motif-screen-MIT.txt"
+            self.assertEqual(
+                archive.read(pipeline_notice), (self.root / "LICENSE").read_bytes()
+            )
+            self.assertIn(f"`{pipeline_notice}`", archive.read("LICENSE.md").decode())
             self.assertEqual(
                 archive.read("pwm_modes.parquet"),
                 (self.database / "pwm_modes.parquet").read_bytes(),
@@ -209,8 +222,11 @@ class ReleaseExportTests(unittest.TestCase):
                 document["sha256"],
             )
         provenance = json.loads((raw / "PROVENANCE.json").read_text())
-        self.assertEqual(set(provenance["repositories"]), {"af3-tf-motif"})
+        self.assertEqual(set(provenance["repositories"]), {"tf-motif-screen"})
         sources = {row["path"]: row for row in provenance["observed_source_files"]}
+        self.assertEqual(
+            {row["repository"] for row in sources.values()}, {"tf-motif-screen"}
+        )
         self.assertEqual(
             sources["LICENSE"]["sha256"],
             hashlib.sha256((self.root / "LICENSE").read_bytes()).hexdigest(),
@@ -225,8 +241,9 @@ class ReleaseExportTests(unittest.TestCase):
             self.assertNotIn("id", rights[0])
             self.assertEqual(rights[0]["title"]["en"], "Other")
             self.assertIn("OUTPUT_TERMS_OF_USE.md", rights[0]["link"])
-            self.assertIn("LICENSE.md", rights[0]["description"]["en"])
-            self.assertIn("reference annotations", rights[0]["description"]["en"])
+            description = rights[0]["description"]["en"]
+            self.assertIn("LICENSE.md", description)
+            self.assertIn("reference annotations", description.lower())
             license_text = archive.read("LICENSE.md").decode()
             self.assertIn("PROSITE", license_text)
             self.assertIn("CC BY-NC-ND 4.0", license_text)
@@ -296,6 +313,16 @@ class ReleaseExportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "not a managed release"):
             self.export()
         self.assertEqual(personal.read_text(), "Keep this\n")
+        manifest = {
+            "schema_version": 1,
+            "producer": "another-project/scripts/export_data.py",
+            "version": "0.1",
+            "files": [{"path": "keep.txt"}],
+        }
+        (self.output / "EXPORT_MANIFEST.json").write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, "different producer"):
+            self.export()
+        self.assertEqual(personal.read_text(), "Keep this\n")
 
     def test_missing_structure_does_not_publish_partial_outputs(self):
         (self.database / self.modes.iloc[0].structure_path).unlink()
@@ -307,17 +334,77 @@ class ReleaseExportTests(unittest.TestCase):
         output = export_release(self.root, self.database, schema="# Fixture schema\n")
         self.assertEqual(output, self.output)
 
+    def test_saved_metadata_from_before_the_repository_rename_can_be_exported(self):
+        config = json.loads((self.export_root / "release/metadata.json").read_text())
+        pipeline_url = config["repositories"].pop("tf-motif-screen")
+        previous = "previous-checkout"
+        config["repositories"][previous] = f"https://github.com/czbiohub-sf/{previous}"
+        config["repositories"]["reference"] = "https://github.com/czbiohub-sf/reference"
+        config["reported_versions"]["basis"] = f"{previous}/README.md"
+        annotation_basis = config["observed_annotation_versions"]["basis"]
+        config["observed_annotation_versions"]["basis"] = (
+            f"{previous}/{annotation_basis}"
+        )
+        config["description"] = f"The {previous} pipeline documents this release."
+        saved = self.root / "saved-metadata.json"
+        original = json.dumps(config)
+        saved.write_text(original)
+
+        self.export(metadata_path=saved)
+        self.export(metadata_path=saved, check=True)
+
+        raw = self.output / "raw"
+        metadata = json.loads((raw / "release_metadata.json").read_text())
+        self.assertEqual(metadata["repositories"]["tf-motif-screen"], pipeline_url)
+        self.assertEqual(
+            metadata["repositories"]["ZebraMotif"], config["repositories"]["ZebraMotif"]
+        )
+        self.assertEqual(
+            metadata["repositories"]["reference"], config["repositories"]["reference"]
+        )
+        self.assertEqual(
+            metadata["reported_versions"]["basis"], "tf-motif-screen/README.md"
+        )
+        self.assertEqual(
+            metadata["observed_annotation_versions"]["basis"], annotation_basis
+        )
+        for name in (
+            "README.md",
+            "release_metadata.json",
+            "PROVENANCE.json",
+            "ZENODO_METADATA.json",
+        ):
+            with self.subTest(name=name):
+                self.assertNotIn(previous, (raw / name).read_text())
+        self.assertEqual(saved.read_text(), original)
+
+    def test_ambiguous_pipeline_repository_is_reported_before_exporting(self):
+        config = json.loads((self.export_root / "release/metadata.json").read_text())
+        del config["repositories"]["tf-motif-screen"]
+        config["repositories"].update(
+            first="https://github.com/czbiohub-sf/first",
+            second="https://github.com/czbiohub-sf/second",
+        )
+        saved = self.root / "saved-metadata.json"
+        saved.write_text(json.dumps(config))
+
+        with self.assertRaisesRegex(ValueError, r"repositories\.tf-motif-screen"):
+            self.export(metadata_path=saved)
+        self.assertFalse(self.output.exists())
+
     def test_relocated_release_from_the_previous_entry_point_is_upgraded(self):
         self.export()
         manifest_path = self.output / "EXPORT_MANIFEST.json"
-        manifest = json.loads(manifest_path.read_text())
-        manifest["producer"] = "af3-tf-motif/scripts/export_data.py"
-        manifest_path.write_text(json.dumps(manifest))
-        self.export()
-        self.assertEqual(
-            json.loads(manifest_path.read_text())["producer"],
-            "af3-tf-motif/data/database/export_data.py",
-        )
+        for script in ("scripts/export_data.py", "data/database/export_data.py"):
+            with self.subTest(script=script):
+                manifest = json.loads(manifest_path.read_text())
+                manifest["producer"] = f"previous-checkout/{script}"
+                manifest_path.write_text(json.dumps(manifest))
+                self.export()
+                self.assertEqual(
+                    json.loads(manifest_path.read_text())["producer"],
+                    "tf-motif-screen/data/database/export_data.py",
+                )
 
     @unittest.skipUnless(
         shutil.which("git"), "Git is needed to inspect checkout provenance"
@@ -348,12 +435,12 @@ class ReleaseExportTests(unittest.TestCase):
         self.export()
         path = self.output / "raw/PROVENANCE.json"
         before = json.loads(path.read_text())
-        self.assertFalse(before["repositories"]["af3-tf-motif"]["has_local_changes"])
+        self.assertFalse(before["repositories"]["tf-motif-screen"]["has_local_changes"])
         code = self.export_root / "export_data.py"
         code.write_text("# Changed export code\n")
         self.export()
         after = json.loads(path.read_text())
-        self.assertTrue(after["repositories"]["af3-tf-motif"]["has_local_changes"])
+        self.assertTrue(after["repositories"]["tf-motif-screen"]["has_local_changes"])
         hashes = {row["path"]: row["sha256"] for row in after["observed_source_files"]}
         self.assertEqual(
             hashes["data/database/export_data.py"],

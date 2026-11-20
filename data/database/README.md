@@ -49,10 +49,9 @@ website repository.
 
 ### Zenodo handoff
 
-Before preparing the final upload, update `release/metadata.json` and
-`release/LICENSE.md` to point to the created public-source snapshot repository,
-including its issue tracker and README sections. Then regenerate the release
-and verify its documents, archives, and checksums:
+The release documents use the pipeline URL from `release/metadata.json`.
+Confirm the public repository URLs and issue tracker in that file and the
+policy section links in `release/LICENSE.md`. Regenerate and verify the release.
 
 ```bash
 python data/database/export_data.py --from-existing
@@ -62,7 +61,7 @@ python data/database/export_data.py --check
 Upload `zebramotif-data-<version>.zip` and its `.zip.sha256` file to Zenodo.
 Set the record's license to **Other** and direct readers to the deposited
 `LICENSE.md` and the
-[AlphaFold 3 Output Terms of Use](https://github.com/google-deepmind/alphafold3/blob/main/OUTPUT_TERMS_OF_USE.md).
+[AlphaFold3 Output Terms of Use](https://github.com/google-deepmind/alphafold3/blob/main/OUTPUT_TERMS_OF_USE.md).
 The generated `raw/ZENODO_METADATA.json` provides custom rights titled `Other`
 and describes the component-specific terms; it does not change the live record.
 Do not select MIT or a Creative Commons license for the dataset as a whole.

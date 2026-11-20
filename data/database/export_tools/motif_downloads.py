@@ -205,7 +205,7 @@ Scores and support:
 
 Read the accompanying `LICENSE.md`, `Legally Binding Terms of Use.txt`, and
 `notices/AF3_OUTPUT_TERMS_OF_USE.md` for reuse terms. Cite this dataset version
-using `CITATION.cff` and the AlphaFold 3 paper cited in `LICENSE.md`.
+using `CITATION.cff` and the AlphaFold3 paper cited in `LICENSE.md`.
 
 ## File integrity
 

@@ -98,7 +98,10 @@ Reference domain annotations in these tables retain their providers' terms.
 
 ### Citation
 
-The accompanying preprint and the ZebraMotif Zenodo record are forthcoming; links will be added here.
+- Iovino, B. et al. *Proteome-scale inference of transcription factor binding motifs
+  from predicted protein-DNA structures*. bioRxiv (2026).
+  [Preprint](https://doi.org/10.64898/2026.11.18.767614)
+- ZebraMotif dataset, version 0.1 (2026). [Zenodo record](https://zenodo.org/records/23380219)
 
 If you use this work, please also cite AlphaFold3:
 

@@ -4,8 +4,8 @@ ZebraMotif provides predicted DNA-binding probability matrices and selected
 protein-DNA structures for zebrafish (*Danio rerio*) transcription factors.
 This is dataset version **$version**: **$release_label**.
 
-AlphaFold 3 predictions and derivatives are provided under the
-[AlphaFold 3 Output Terms of Use](notices/AF3_OUTPUT_TERMS_OF_USE.md).
+AlphaFold3 predictions and derivatives are provided under the
+[AlphaFold3 Output Terms of Use](notices/AF3_OUTPUT_TERMS_OF_USE.md).
 Read [LICENSE.md](LICENSE.md) and
 [Legally Binding Terms of Use.txt](Legally%20Binding%20Terms%20of%20Use.txt)
 before reuse. The repositories' MIT software licenses apply to their code.
@@ -16,7 +16,7 @@ before reuse. The repositories' MIT software licenses apply to their code.
 |---|---|
 | `pwm_modes.parquet` | $modes binding modes for $primary_modes modeled proteins: $primary_modes primary and $alternate_modes alternate modes, including matrices, support, reference comparisons, and structure paths. |
 | `tf_to_rep.parquet` | $query_entries query entries: $full_length_entries full-length gene entries and $domain_entries domain entries; $resolved_queries entries resolve to a representative motif. |
-| `structures/` | $structures selected AlphaFold 3 structures, one gzip-compressed mmCIF file per primary mode. |
+| `structures/` | $structures selected AlphaFold3 structures, one gzip-compressed mmCIF file per primary mode. |
 | `interface_residues.parquet` | $contact_rows DNA-contact residue annotations for $contact_proteins proteins. |
 | `confidence_metrics.parquet` | $confidence_rows confidence summary rows for $confidence_proteins proteins, across all predictions and the top 47. |
 | `dbd_domains.parquet` | $domain_rows domain annotations for $annotated_proteins proteins, including DNA-placement flags. |
@@ -28,7 +28,7 @@ before reuse. The repositories' MIT software licenses apply to their code.
 | `PROVENANCE.json` | File sizes and SHA-256 hashes, observed repository revisions and source files, pipeline settings, and coverage limitations. |
 | `CITATION.cff` | Machine-readable dataset citation. |
 | `ZENODO_METADATA.json` | Dataset description, creators, related resources, and scoped license metadata for the deposit. |
-| `notices/` | AlphaFold 3 terms and preserved software license notices. |
+| `notices/` | AlphaFold3 terms and preserved software license notices. |
 | `SHA256SUMS` | Checksums of every distributed file except the checksum file itself. |
 
 The $primary_modes modeled representatives comprise $full_length_representatives
@@ -40,13 +40,13 @@ Full screening ensembles and upstream reference databases are separate resources
 
 ## Methods and sources
 
-The [af3-tf-motif pipeline](https://github.com/czbiohub-sf/af3-tf-motif)
-folds proteins with candidate DNA using AlphaFold 3, predicts binding
+The [$pipeline_name pipeline]($pipeline_url)
+folds proteins with candidate DNA using AlphaFold3, predicts binding
 specificities with NA-MPNN, and clusters them into consensus modes. This export
 uses **47** selected specificities, a **0.73** UPGMA merge cutoff, up to three
 alternates, and a **0.72** similarity cutoff for `primary_refined` alternates.
-Each primary structure is selected from its mode using the ipTM × domain-pLDDT
-rank product.
+Each primary structure is selected from its mode using the ipTM × DBD-pLDDT
+rank product, where DBD-pLDDT is the mean pLDDT over the DNA-binding domain.
 
 AnimalTFDB 4.0 supplies catalog identifiers and family labels. JASPAR 2024 CORE
 vertebrate motifs supply reference comparisons. InterProScan annotations from

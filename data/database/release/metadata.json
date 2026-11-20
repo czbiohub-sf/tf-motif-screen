@@ -9,28 +9,73 @@
     {
       "family_name": "Iovino",
       "given_name": "Benjamin",
+      "affiliation": "Biohub",
+      "orcid": "0009-0007-6512-4214"
+    },
+    {
+      "family_name": "Bulaong",
+      "given_name": "Nash",
       "affiliation": "Biohub"
+    },
+    {
+      "family_name": "Boahene",
+      "given_name": "Louis",
+      "affiliation": "Biohub"
+    },
+    {
+      "family_name": "Law",
+      "given_name": "William",
+      "affiliation": "Biohub"
+    },
+    {
+      "family_name": "Hammond",
+      "given_name": "Nathan",
+      "affiliation": "Biohub"
+    },
+    {
+      "family_name": "Potts",
+      "given_name": "Mark",
+      "affiliation": "Biohub"
+    },
+    {
+      "family_name": "Alvarez",
+      "given_name": "Rosio",
+      "affiliation": "Biohub"
+    },
+    {
+      "family_name": "DeRisi",
+      "given_name": "Joseph L.",
+      "affiliation": "Biohub",
+      "orcid": "0000-0002-4611-9205"
+    },
+    {
+      "family_name": "Pak",
+      "given_name": "John",
+      "affiliation": "Biohub",
+      "orcid": "0000-0002-2998-9735"
     },
     {
       "family_name": "Kim",
       "given_name": "Yang Joon",
-      "affiliation": "Biohub"
+      "affiliation": "Biohub",
+      "orcid": "0000-0003-1742-5657"
     },
     {
       "family_name": "Royer",
-      "given_name": "Loïc A",
-      "affiliation": "Biohub"
+      "given_name": "Loïc A.",
+      "affiliation": "Biohub",
+      "orcid": "0000-0002-9991-9724"
     }
   ],
   "repositories": {
     "ZebraMotif": "https://github.com/czbiohub-sf/zebramotif-explorer",
-    "af3-tf-motif": "https://github.com/czbiohub-sf/af3-tf-motif"
+    "tf-motif-screen": "https://github.com/czbiohub-sf/tf-motif-screen"
   },
   "contact_url": "https://github.com/czbiohub-sf/zebramotif-explorer/issues",
   "reported_versions": {
-    "basis": "af3-tf-motif/README.md",
-    "AlphaFold 3": "3.0.1",
-    "AlphaFold 3 model parameters": "November 2024",
+    "basis": "tf-motif-screen/README.md",
+    "AlphaFold3": "3.0.1",
+    "AlphaFold3 model parameters": "November 2024",
     "NA-MPNN": "commit 835974f3; checkpoint s_70114.pt",
     "AnimalTFDB": "4.0",
     "JASPAR": "2024 CORE vertebrates, redundant",
@@ -38,7 +83,7 @@
     "Pfam": "37.2"
   },
   "observed_annotation_versions": {
-    "basis": "af3-tf-motif/data/tools/ipscan/tfdb4_rep/tfdb4_rep_results.json",
+    "basis": "data/tools/ipscan/tfdb4_rep/tfdb4_rep_results.json",
     "InterProScan": "5.73-104.0",
     "Pfam": "37.2",
     "PROSITE Profiles": "2023_05"
@@ -55,9 +100,9 @@
     "num_specs": 47,
     "cor_threshold": 0.73,
     "maximum_alternates": 3,
-    "specificity_selection": "Top predictions by the product of ipTM and DNA-binding-domain pLDDT percentile ranks.",
+    "specificity_selection": "Top predictions by the product of ipTM and DBD-pLDDT percentile ranks.",
     "primary_selection": "Largest UPGMA cluster of predicted specificities, with equal-size ties broken by the product of member confidence ranks.",
-    "primary_structure_selection": "Most confident member of the primary mode by the ipTM and domain-pLDDT percentile-rank product.",
+    "primary_structure_selection": "Most confident member of the primary mode by the ipTM and DBD-pLDDT percentile-rank product.",
     "matrix_column_order": [
       "A",
       "C",
@@ -72,7 +117,9 @@
   },
   "citation": {
     "dataset_metadata_url": "https://zenodo.org/records/23380219",
-    "project_paper": null,
+    "project_paper": {
+      "doi": "10.64898/2026.11.18.767614"
+    },
     "alphafold3": {
       "text": "Abramson, J. et al. Accurate structure prediction of biomolecular interactions with AlphaFold 3. Nature 630, 493–500 (2024).",
       "doi": "10.1038/s41586-024-07487-w",
@@ -82,7 +129,7 @@
   "terms": {
     "alphafold3_output_terms_url": "https://github.com/google-deepmind/alphafold3/blob/main/OUTPUT_TERMS_OF_USE.md",
     "dataset_license_url": "https://zenodo.org/records/23380219",
-    "scope": "AlphaFold 3 structures and derivatives, including predicted motifs, confidence summaries, DNA-contact residues, and AF3-derived domain-placement flags. Reference annotations retain their providers' terms; repository MIT licenses apply to software."
+    "scope": "AlphaFold3 structures and derivatives, including predicted motifs, confidence summaries, DNA-contact residues, and AF3-derived domain-placement flags. Reference annotations retain their providers' terms. Repository MIT licenses apply to software."
   },
   "metadata_sources": [
     "data/database/release/metadata.json",
@@ -95,14 +142,14 @@
     "data/database/export_tools/metric_bands.py"
   ],
   "release_label": "Initial bioRxiv version",
-  "description": "Predicted DNA-binding probability matrices and selected protein-DNA structures for Danio rerio transcription factors. The af3-tf-motif pipeline uses AlphaFold 3 structures, NA-MPNN specificity predictions, and consensus clustering to produce primary and alternate binding modes. The dataset includes representative mappings, reference motif comparisons, confidence summaries, domain annotations, and DNA-contact residues.",
+  "description": "Predicted DNA-binding probability matrices and selected protein-DNA structures for Danio rerio transcription factors. The tf-motif-screen pipeline uses AlphaFold3 structures, NA-MPNN specificity predictions, and consensus clustering to produce primary and alternate binding modes. The dataset includes representative mappings, reference motif comparisons, confidence summaries, domain annotations, and DNA-contact residues.",
   "keywords": [
     "Danio rerio",
     "zebrafish",
     "transcription factor",
     "DNA-binding specificity",
     "probability matrix",
-    "AlphaFold 3",
+    "AlphaFold3",
     "NA-MPNN"
   ]
 }

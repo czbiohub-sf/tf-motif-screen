@@ -13,7 +13,7 @@ Produces working scientific files under data/database/export/database/:
                           representative TF that has a usable specificity prediction.
     tf_to_rep.parquet  -- one row per queryable zebrafish DBID (full set + reps),
                           resolving each to the representative whose PWM the app shows.
-    structures/        -- gzipped AF3 .cif of the most-confident structure (ipTM x pLDDT
+    structures/        -- gzipped AF3 .cif of the most-confident structure (ipTM × DBD-pLDDT
                           rank product) of each TF's primary mode, referenced from
                           pwm_modes.structure_path.
     interface_residues.parquet -- one row per DNA-contacting (interface) residue for every
@@ -508,7 +508,7 @@ def probability_matrix(mode):
 | `cor_threshold` | float | UPGMA merge cutoff (0.73) |
 | `pwm` | list[list[float]] | (L, 4) probability matrix, columns A,C,G,T |
 | `pwm_length` | int | L |
-| `structure_path` | str | path relative to the extracted dataset directory to the gzipped AF3 `.cif` of the primary mode's most-confident structure (ipTM×domain-pLDDT rank product); set on the primary row only, null otherwise / when the source `.cif` is missing |
+| `structure_path` | str | path relative to the extracted dataset directory to the gzipped AF3 `.cif` of the primary mode's most-confident structure (ipTM × DBD-pLDDT rank product); set on the primary row only, null otherwise / when the source `.cif` is missing |
 | `corr_to_primary` | float | alternate vs primary similarity (null for primary) |
 | `offset_to_primary` | int | alignment offset of alternate vs primary (null for primary) |
 | `rc_to_primary` | bool | alternate reverse-complemented vs primary (null for primary) |
@@ -628,7 +628,7 @@ join on the representative `DBID`, rather than `motif_id`.
 
 One gzipped AF3 mmCIF per representative, named `<motif_id>.cif.gz`,
 holding the primary mode's most-confident structure (the primary cluster member with the
-highest ipTM x domain-pLDDT rank product). pLDDT is in the CIF B-factor column.
+highest ipTM × DBD-pLDDT rank product). pLDDT is in the CIF B-factor column.
 Referenced by `structure_path`; decompress relative to the extracted dataset
 directory:
 
@@ -652,7 +652,7 @@ the full screen; `top47` uses the predictions selected for motif construction.
 | column | type | notes |
 |---|---|---|
 | `DBID` | str | protein Ensembl id (joins `pwm_modes` / `tf_to_rep`) |
-| `subset` | str | `all` = every prediction; `top47` = up to 47 predictions selected by ipTM x domain-pLDDT percentile-rank product (fewer when fewer predictions are available) |
+| `subset` | str | `all` = every prediction; `top47` = up to 47 predictions selected by ipTM × DBD-pLDDT percentile-rank product (fewer when fewer predictions are available) |
 | `metric` | str | one of ipTM, iface_PAE, iface_PAE_contact, iface_contact_prob, n_contacted_bases, dna_pLDDT, dom_pLDDT, prot_pTM, fraction_disordered, ptm, ranking_score, has_clash |
 | `category` | str | `tf` (fold), `interface` (protein-DNA), or `global` |
 | `higher_is_better` | bool | whether higher values indicate greater confidence (False for PAE / disorder / clash) |
@@ -668,8 +668,9 @@ These summaries pool predictions across binding modes. Individual cluster
 members and per-mode confidence estimates are not provided in this table.
 Prediction support for each mode is its own `n_members` value.
 
-An all-zero `dom_pLDDT` distribution denotes an unavailable domain-confidence
-estimate because no annotated DNA-binding domain was available for that protein.
+The metric key `dom_pLDDT` denotes DBD-pLDDT, the mean pLDDT over the DNA-binding
+domain. An all-zero distribution means the estimate was unavailable because the
+protein lacked an annotated DNA-binding domain.
 See the [AF3 confidence documentation](https://github.com/google-deepmind/alphafold3/blob/main/docs/output.md#confidence-metrics)
 for interpretation of the underlying structure-confidence scores.
 """

@@ -15,7 +15,7 @@ GRN_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = GRN_ROOT / "config" / "grn_swap.yaml"
 ANNOTATIONS = ("global_annotation", "annotation_ML_coarse")
 
-# grn/ -> af3-tf-motif/ (read af3tfm's config.yaml directly; af3tfm isn't installed in this env)
+# Read af3tfm's config.yaml directly from the repository root.
 PROJECT_ROOT = GRN_ROOT.parents[2]
 AF3TFM_CONFIG = PROJECT_ROOT / "src" / "af3tfm" / "config.yaml"
 AF3TFM_LOCAL_CONFIG = AF3TFM_CONFIG.with_name("config.local.yaml")  # personal overrides

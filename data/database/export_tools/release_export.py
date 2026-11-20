@@ -25,8 +25,10 @@ AF3_TERMS = (
 )
 AF3_PAPER = "10.1038/s41586-024-07487-w"
 EXPORT_PATH = Path("data/database")
-PRODUCER = "af3-tf-motif/data/database/export_data.py"
-LEGACY_PRODUCER = "af3-tf-motif/scripts/export_data.py"
+PIPELINE_REPOSITORY = "tf-motif-screen"
+REPOSITORY_OWNER_URL = "https://github.com/czbiohub-sf"
+PIPELINE_REPOSITORY_URL = f"{REPOSITORY_OWNER_URL}/{PIPELINE_REPOSITORY}"
+PRODUCER = f"{PIPELINE_REPOSITORY}/{EXPORT_PATH.as_posix()}/export_data.py"
 TABLES = (
     "pwm_modes.parquet",
     "tf_to_rep.parquet",
@@ -44,12 +46,12 @@ EXPORTS = (
     "zebramotif_all_modes.metadata.tsv",
 )
 RIGHTS_DESCRIPTION = (
-    "Applies to AlphaFold 3 structures and derivatives, including predicted "
+    "Applies to AlphaFold3 structures and derivatives, including predicted "
     "PPM/MEME motifs, confidence summaries, residue contacts, and AF3-derived "
-    "domain-placement flags, following the ZebraMotif and af3-tf-motif data "
+    "domain-placement flags, following the source repositories' data "
     "policies. Preserve the full Output Terms, Legally Binding Terms of Use "
-    "notice, modification descriptions, and AlphaFold 3 citation. Source "
-    "software is MIT-licensed; reference annotations retain their providers' "
+    "notice, modification descriptions, and AlphaFold3 citation. Source "
+    "software is MIT-licensed. Reference annotations retain their providers' "
     "terms and attributions. See the deposited LICENSE.md for the scope by file."
 )
 
@@ -92,7 +94,11 @@ def repository_state(root, url, generated_paths=()):
         "url": url,
         "head_at_metadata_preparation": head,
         "has_local_changes": changed,
-        "status_scope": "Pipeline source files, excluding generated exports; null means Git metadata is unavailable.",
+        "status_scope": (
+            "Revision and status describe the local checkout used for packaging. "
+            "Status excludes generated exports. Null means Git metadata is unavailable. "
+            "The URL identifies the documented pipeline."
+        ),
     }
 
 
@@ -197,7 +203,7 @@ def citation(config):
         f"version: {quote(config['version'])}",
         "message: >-",
         "  Cite the Zenodo record for the exact dataset version you used.",
-        "  Also cite the AlphaFold 3 paper listed in README.md.",
+        "  Also cite the AlphaFold3 paper listed in README.md.",
         "authors:",
     ]
     for creator in config["creators"]:
@@ -251,7 +257,7 @@ def zenodo_metadata(config, counts):
         f"{counts['full_length_representatives']:,} full-length proteins and "
         f"{counts['domain_representatives']:,} separately modeled domains. "
         "The included README, schema, and provenance describe methods, coverage, and file identities.</p>"
-        f'<p>Predictions and derivatives are subject to the <a href="{AF3_TERMS}">AlphaFold 3 Output Terms of Use</a>. '
+        f'<p>Predictions and derivatives are subject to the <a href="{AF3_TERMS}">AlphaFold3 Output Terms of Use</a>. '
         "See the deposited LICENSE.md for the scope by file, preserved software MIT notices, and reference attributions.</p>"
         f'<p>Also cite Abramson et al., Nature (2024), <a href="https://doi.org/{AF3_PAPER}">{AF3_PAPER}</a>.</p>'
     )
@@ -295,6 +301,53 @@ def zenodo_metadata(config, counts):
     return json_bytes(document)
 
 
+def migrate_pipeline_repository(config):
+    """Use the current pipeline identity when loading older release metadata."""
+    repositories = config.get("repositories")
+    missing_url = f"Set repositories.{PIPELINE_REPOSITORY} to the pipeline URL in release metadata"
+    if not isinstance(repositories, dict):
+        raise ValueError(missing_url)
+    if PIPELINE_REPOSITORY in repositories:
+        url = repositories[PIPELINE_REPOSITORY]
+        if not isinstance(url, str) or not url.strip():
+            raise ValueError(missing_url)
+        return
+
+    candidates = [
+        name
+        for name, url in repositories.items()
+        if name != "ZebraMotif"
+        and isinstance(url, str)
+        and url.rstrip("/").removesuffix(".git").casefold()
+        == f"{REPOSITORY_OWNER_URL}/{name}".casefold()
+    ]
+    methods_basis = config["reported_versions"].get("basis")
+    previous = methods_basis.partition("/")[0] if isinstance(methods_basis, str) else ""
+    if previous not in candidates:
+        if len(candidates) != 1 or set(repositories) - {"ZebraMotif"} != set(
+            candidates
+        ):
+            raise ValueError(missing_url)
+        (previous,) = candidates
+
+    previous_url = repositories.pop(previous)
+    repositories[PIPELINE_REPOSITORY] = PIPELINE_REPOSITORY_URL
+    prefix = f"{previous}/"
+    for field, replacement in (
+        ("reported_versions", f"{PIPELINE_REPOSITORY}/"),
+        ("observed_annotation_versions", ""),
+    ):
+        versions = config[field]
+        basis = versions.get("basis")
+        if isinstance(basis, str) and basis.startswith(prefix):
+            versions["basis"] = replacement + basis.removeprefix(prefix)
+    config["description"] = re.sub(
+        rf"(?<![\w.-]){re.escape(previous)}(?![\w-])",
+        PIPELINE_REPOSITORY,
+        config["description"].replace(previous_url, PIPELINE_REPOSITORY_URL),
+    )
+
+
 def load_config(path):
     config = json.loads(Path(path).read_text())
     if not isinstance(config.get("version"), str) or not re.fullmatch(
@@ -308,6 +361,7 @@ def load_config(path):
             date.fromisoformat(config[key])
     if config.get("doi") and not re.fullmatch(r"10\.\d{4,9}/\S+", config["doi"]):
         raise ValueError("Use a DOI identifier, without a https://doi.org/ prefix")
+    migrate_pipeline_repository(config)
     return config
 
 
@@ -380,17 +434,22 @@ def prepare_documents(
         f"{creator['family_name']}, {creator['given_name']}"
         for creator in config["creators"]
     )
-    cite = f"{authors}. *{config['title']}*. Version {config['version']}."
+    cite = f"{authors.rstrip('.')}. *{config['title']}*. Version {config['version']}."
     if config.get("doi"):
         cite += f" Zenodo. [https://doi.org/{config['doi']}](https://doi.org/{config['doi']})"
     else:
         cite += " Cite the version-specific Zenodo DOI once assigned; `CITATION.cff` records the dataset metadata."
+    pipeline_url = config["repositories"][PIPELINE_REPOSITORY]
+    pipeline_notice = f"notices/{PIPELINE_REPOSITORY}-MIT.txt"
     values = {key: f"{value:,}" for key, value in counts.items()}
     values.update(
         title=config["title"],
         version=config["version"],
         release_label=config["release_label"],
         citation=cite,
+        pipeline_name=PIPELINE_REPOSITORY,
+        pipeline_url=pipeline_url,
+        pipeline_notice=pipeline_notice,
     )
     values["domain_representative_names"] = ", ".join(
         f"`{row['TF_Name']}`" for row in coverage["domain_representatives"]
@@ -416,17 +475,19 @@ def prepare_documents(
         .substitute(values)
         .encode(),
         "LICENSE.md": Template((release / "LICENSE.md").read_text())
-        .substitute(title=config["title"])
+        .substitute(values)
         .encode(),
         "Legally Binding Terms of Use.txt": (
             release / "Legally Binding Terms of Use.txt"
         ).read_bytes(),
-        "CITATION.cff": citation(config),
+        "CITATION.cff": (
+            citation(config) + (release / "citation-references.yml").read_bytes()
+        ),
         "ZENODO_METADATA.json": zenodo_metadata(config, counts),
         "notices/ZebraMotif-MIT.txt": (
             release / "notices/ZebraMotif-MIT.txt"
         ).read_bytes(),
-        "notices/af3-tf-motif-MIT.txt": (root / "LICENSE").read_bytes(),
+        pipeline_notice: (root / "LICENSE").read_bytes(),
     }
     notice_sources = json.loads((release / "notices/sources.json").read_text())
     for source in notice_sources["documents"]:
@@ -475,7 +536,7 @@ def prepare_documents(
         )
     ]
     observed = [
-        {"repository": "af3-tf-motif", **file_record(root / name, root)}
+        {"repository": PIPELINE_REPOSITORY, **file_record(root / name, root)}
         for name in sorted(set(source_paths))
         if (root / name).is_file()
     ]
@@ -505,9 +566,7 @@ def prepare_documents(
         "reported_versions": config["reported_versions"],
         "observed_annotation_versions": config["observed_annotation_versions"],
         "repositories": {
-            "af3-tf-motif": repository_state(
-                root, config["repositories"]["af3-tf-motif"], generated_paths
-            )
+            PIPELINE_REPOSITORY: repository_state(root, pipeline_url, generated_paths)
         },
         "source_identity_scope": "Source-file hashes and repository revisions were recorded during packaging. Original model-generation inputs and dates are identified only where documented.",
         "observed_source_files": observed,
@@ -593,9 +652,25 @@ def validate_output_directory(output):
     if not manifest.is_file():
         raise ValueError(f"Nonempty output is not a managed release: {output}")
     saved = json.loads(manifest.read_text())
-    if saved.get("producer") not in {PRODUCER, LEGACY_PRODUCER}:
+    producer = saved.get("producer")
+    owned = {row["path"] for row in saved.get("files", ())}
+    required_files = {
+        "raw/release_metadata.json",
+        "raw/PROVENANCE.json",
+        f"zebramotif-data-{saved.get('version')}.zip",
+    }
+    # Releases from either exporter path can be rebuilt after a repository rename.
+    if (
+        not isinstance(producer, str)
+        or not re.fullmatch(
+            r"[A-Za-z0-9][A-Za-z0-9._-]*/(?:data/database|scripts)/export_data\.py",
+            producer,
+        )
+        or saved.get("schema_version") != 1
+        or not required_files <= owned
+    ):
         raise ValueError(f"Output belongs to a different producer: {output}")
-    owned = {row["path"] for row in saved["files"]} | {"EXPORT_MANIFEST.json"}
+    owned.add("EXPORT_MANIFEST.json")
     present = set()
     for path in output.rglob("*"):
         if path.is_symlink():

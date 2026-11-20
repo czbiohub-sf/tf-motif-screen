@@ -65,7 +65,7 @@ omit = [
 ]
 
 [tool.coverage.paths]
-af3tfm = ["src/af3tfm", "*/af3-tf-motif/src/af3tfm"]
+af3tfm = ["src/af3tfm", "*/tf-motif-screen/src/af3tfm"]
 
 [tool.coverage.report]
 exclude_lines = [
